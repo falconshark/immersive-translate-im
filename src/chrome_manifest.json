@@ -4,7 +4,7 @@
     "name": "Immersive Translate",
     "description": "Let's experience immersive web translation, with bilingual simultaneous display and translation of only the important content.",
     "version": "0.0.41",
-    "homepage_url": "https://github.com/immersive-translate/immersive-translate",
+    "homepage_url": "https://github.com/immersive-translate/old-immersive-translate",
 
     "commands": {
         "hotkey-toggle-translation": {

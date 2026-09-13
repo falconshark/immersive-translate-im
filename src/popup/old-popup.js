@@ -33,13 +33,7 @@ twpConfig.onReady(function () {
     const btnOptionsDiv = document.getElementById("btnOptionsDiv")
     const btnOptions = document.getElementById("btnOptions")
 
-    $("#btnPatreon").onclick = e => {
-        window.open("https://www.patreon.com/theowenyoung", "_blank")
-    }
-
-
     $("#btnOptionB").innerHTML += ' <i class="arrow down"></i>'
-    $("#btnOptions option[value='donate']").innerHTML += " &#10084;";
 
     var cStyle = getComputedStyle(document.querySelector("#btnOptionB"))
     btnOptions.style.width = (parseInt(cStyle.width) + 0) + "px"
@@ -454,11 +448,6 @@ twpConfig.onReady(function () {
                 case "moreOptions":
                     chrome.tabs.create({
                         url: chrome.runtime.getURL("/options/options.html")
-                    })
-                    break
-                case "donate":
-                    chrome.tabs.create({
-                        url: chrome.runtime.getURL("/options/options.html#donation")
                     })
                     break
                 default:

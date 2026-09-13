@@ -24,7 +24,7 @@ twpConfig.onReady(function () {
 
     function hashchange() {
         const hash = location.hash || "#main"
-        const divs = [$("#main"),  $("#translations"),  $("#hotkeys"), $("#storage"), $("#others"), $("#donation"), ]
+        const divs = [$("#main"),  $("#translations"),  $("#hotkeys"), $("#storage"), $("#others"), ]
         divs.forEach(element => {
             element.style.display = "none"
         })
@@ -36,21 +36,13 @@ twpConfig.onReady(function () {
         $(hash).style.display = "block"
         $('a[href="' + hash + '"]').classList.add("w3-light-grey")
 
-        let text
-        if (hash === "#donation") {
-            text = chrome.i18n.getMessage("lblMakeDonation")
-        }else {
-            text = chrome.i18n.getMessage("lblSettings")
-        }
-        $("#itemSelectedName").textContent = text
+        $("#itemSelectedName").textContent = chrome.i18n.getMessage("lblSettings")
 
         if (sideBarIsVisible) {
             $("#menuContainer").classList.toggle("change")
             $("#sideBar").style.display = "none"
             sideBarIsVisible = false
         }
-
-        $("#btnPatreon").style.display = "block"
     }
     hashchange()
     window.addEventListener("hashchange", hashchange)
@@ -102,15 +94,6 @@ twpConfig.onReady(function () {
             el.textContent = `
             * {
                 scrollbar-color: #202324 #454a4d;
-            }
-
-            #donation * {
-                background-color: #87CEEB !important;
-            }
-
-            #donation select {
-                color: black !important;
-                background-color: rgb(231, 230, 228) !important;
             }
 
             html *, nav, #header {
@@ -800,23 +783,6 @@ twpConfig.onReady(function () {
         })
     }
 
-    // if (navigator.language === "pt-BR") {
-    //     $("#currency").value = "BRL"
-    //     $("#donateInUSD").style.display = "none"
-    // } else {
-    //     $("#currency").value = "USD"
-    //     $("#donateInBRL").style.display = "none"
-    // }
-
-    // $("#currency").onchange = e => {
-    //     if (e.target.value === "BRL") {
-    //         $("#donateInUSD").style.display = "none"
-    //         $("#donateInBRL").style.display = "block"
-    //     } else {
-    //         $("#donateInUSD").style.display = "block"
-    //         $("#donateInBRL").style.display = "none"
-    //     }
-    // }
 })
 
 window.scrollTo({

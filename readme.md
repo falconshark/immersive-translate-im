@@ -1,6 +1,9 @@
 
 # Immersive Translate - 沉浸式翻译扩展(双语对照）
 
+> **个人自用版本，非官方发布。** 本项目 Fork 自原作者的 [immersive-translate/old-immersive-translate](https://github.com/immersive-translate/old-immersive-translate)（沉浸式翻译旧版存档），仅供个人本地测试使用，未上架任何应用商店，也不接受捐款/赞助。
+
+在原版基础上新增了**图片说明文字翻译**：网页中图片的 `alt`、`title`、`aria-label` 描述文字（包括懒加载 / 无限滚动动态插入的图片）现在也会随网页一起被翻译，而不仅仅是正文文字。
 
 说明：新版的沉浸式翻译扩展已经迁移到[这里](https://github.com/immersive-translate/immersive-translate)，新版全新架构，性能更好，支持更多的翻译引擎和浏览器平台（包括iOS Safari），以及拥有更好的pdf翻译体验，欢迎移步[新版](https://github.com/immersive-translate/immersive-translate)。旧版代码将存档。
 

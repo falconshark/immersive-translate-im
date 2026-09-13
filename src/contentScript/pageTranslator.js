@@ -302,6 +302,19 @@ Promise.all([twpConfig.onReady(), getTabUrl()])
                         piecesToTranslate.push(newPiecesToTranslate[i])
                     }
                 }
+
+                // Lazily-inserted images (infinite scroll, lazy loading, etc.) carry their own
+                // alt/title/aria-label description, which the initial getAttributesToTranslate()
+                // scan (run once in translatePage) never sees. Re-scan each newly added subtree.
+                if (nn.nodeType === 1) {
+                    const newAttributesToTranslate = getAttributesToTranslate(nn)
+                    for (const nati of newAttributesToTranslate) {
+                        const finded = attributesToTranslate.some(ati => ati.node === nati.node && ati.attrName === nati.attrName)
+                        if (!finded) {
+                            attributesToTranslate.push(nati)
+                        }
+                    }
+                }
             }
         } catch (e) {
             console.error(e)
@@ -537,11 +550,24 @@ Promise.all([twpConfig.onReady(), getTabUrl()])
     function getAttributesToTranslate(root = document.body) {
         const attributesToTranslate = []
 
-        const placeholdersElements = root.querySelectorAll('input[placeholder], textarea[placeholder]')
-        const altElements = root.querySelectorAll('area[alt], img[alt], input[type="image"][alt]')
+        // A mutation can add a single element directly (e.g. an <img> with no wrapper),
+        // so querySelectorAll on root alone would miss it. Match root itself too.
+        function queryIncludingSelf(selector) {
+            const results = Array.from(root.querySelectorAll(selector))
+            if (root.nodeType === 1 && root.matches && root.matches(selector)) {
+                results.push(root)
+            }
+            return results
+        }
+
+        const placeholdersElements = queryIncludingSelf('input[placeholder], textarea[placeholder]')
+        const altElements = queryIncludingSelf('area[alt], img[alt], input[type="image"][alt]')
         // const valueElements = root.querySelectorAll('input[type="button"], input[type="submit"], input[type="reset"]')
         const valueElements = [];
-        const titleElements = root.querySelectorAll("body [title]")
+        const titleElements = queryIncludingSelf("body [title]")
+        // Images / icons that expose their description only through aria-label (common for
+        // background-image icons and icon-only buttons that skip the alt attribute).
+        const ariaLabelElements = queryIncludingSelf('img[aria-label], area[aria-label], [role="img"][aria-label], svg[aria-label]')
 
         function hasNoTranslate(elem) {
             if (elem && (elem.classList.contains("notranslate") || elem.getAttribute("translate") === "no")) {
@@ -609,6 +635,19 @@ Promise.all([twpConfig.onReady(), getTabUrl()])
                     node: e,
                     original: txt,
                     attrName: "title"
+                })
+            }
+        })
+
+        ariaLabelElements.forEach(e => {
+            if (hasNoTranslate(e)) return;
+
+            const txt = e.getAttribute("aria-label")
+            if (txt && txt.trim()) {
+                attributesToTranslate.push({
+                    node: e,
+                    original: txt,
+                    attrName: "aria-label"
                 })
             }
         })
